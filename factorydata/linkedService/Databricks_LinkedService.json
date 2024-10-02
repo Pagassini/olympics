@@ -1,0 +1,13 @@
+{
+	"name": "Databricks_LinkedService",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-2575191751136884.4.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/4ad8eac1-aab5-4b26-8d45-60cce2cda876/resourceGroups/olympics/providers/Microsoft.Databricks/workspaces/databricksolympics",
+			"existingClusterId": "1002-191840-e600kmp2"
+		}
+	}
+}
