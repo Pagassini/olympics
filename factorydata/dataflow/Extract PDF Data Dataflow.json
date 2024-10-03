@@ -1,0 +1,74 @@
+{
+	"name": "Extract PDF Data Dataflow",
+	"properties": {
+		"description": "This dataflow takes the output from Cognitive Services and extracts the PDF information to a storage sink.\nThis specifically works with the prebuilt-read model, but you can adjust as needed. You can also save the transformations as a flowlet if you would like to reuse the logic in other dataflows. \n\nIf you choose to use other prebuilt models, please note that you may need to reimport your dataflow source schema and make some adjustments to the transformations.",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "CognitiveServices_Get",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "Blob",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     OutputFolder as string ('output'),",
+				"     OutputContainer as string ('formrecognizer')",
+				"}",
+				"source(output(",
+				"          body as (analyzeResult as (apiVersion as date, content as string, languages as (confidence as double, locale as string, spans as (length as short, offset as short)[])[], modelId as string, pages as (angle as boolean, height as short, kind as string, lines as (content as string, polygon as short[], spans as (length as short, offset as short)[])[], pageNumber as string, spans as (length as short, offset as boolean)[], unit as string, width as short, words as (confidence as double, content as string, polygon as short[], span as (length as short, offset as short))[])[], paragraphs as (boundingRegions as (pageNumber as string, polygon as short[])[], content as string, spans as (length as short, offset as short)[])[], stringIndexType as string, styles as string[]), createdDateTime as timestamp, lastUpdatedDateTime as timestamp, status as string),",
+				"          headers as [string,string]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     format: 'rest',",
+				"     timeout: 30,",
+				"     requestInterval: 0,",
+				"     httpMethod: 'GET',",
+				"     paginationRules: ['supportRFC5988' -> 'true'],",
+				"     responseFormat: ['type' -> 'json', 'documentForm' -> 'documentPerLine']) ~> source1",
+				"source1 foldDown(unroll(body.analyzeResult.paragraphs),",
+				"     mapColumn(",
+				"          content = body.analyzeResult.paragraphs.content,",
+				"          pageNumber = body.analyzeResult.paragraphs.boundingRegions.pageNumber",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 derive(content = content,",
+				"          pageNumber = pageNumber[1]) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: ($OutputContainer),",
+				"     folderPath: ($OutputFolder),",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
