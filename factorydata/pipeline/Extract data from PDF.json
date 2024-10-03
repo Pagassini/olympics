@@ -75,7 +75,7 @@
 		"parameters": {
 			"CognitiveServicesURL": {
 				"type": "string",
-				"defaultValue": "https://olympicspdf.cognitiveservices.azure.com/"
+				"defaultValue": "https://olympicspdf.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyze?api-version=2022-08-31"
 			},
 			"CognitiveServicesKey": {
 				"type": "string",
