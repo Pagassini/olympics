@@ -1,10 +1,10 @@
 {
-	"name": "pipeline1",
+	"name": "Transfer from CSV to Bronze",
 	"properties": {
 		"activities": [
 			{
-				"name": "Transform PDFs to SQL",
-				"type": "DatabricksNotebook",
+				"name": "Transfer to Bronze",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,11 +15,15 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/Transform PDFs to SQL"
-				},
-				"linkedServiceName": {
-					"referenceName": "Databricks_LinkedService",
-					"type": "LinkedServiceReference"
+					"dataflow": {
+						"referenceName": "CSV to SQL",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
 				}
 			}
 		],

@@ -1,0 +1,60 @@
+{
+	"name": "CSV to SQL",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CSV",
+						"type": "DatasetReference"
+					},
+					"name": "DataLake"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Warehouse",
+						"type": "DatasetReference"
+					},
+					"name": "Warehouse"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {Event Type} as string,",
+				"          Round as string,",
+				"          Date as string,",
+				"          Location as string,",
+				"          Rank as string,",
+				"          {Athlete Bib} as string,",
+				"          Name as string,",
+				"          {NOC Code} as string,",
+				"          Heat as string,",
+				"          Lane as string,",
+				"          Pos as string,",
+				"          Time as string,",
+				"          Milliseconds as string,",
+				"          Wind as string,",
+				"          Result as string,",
+				"          {Additional Info} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DataLake",
+				"DataLake sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> Warehouse"
+			]
+		}
+	}
+}

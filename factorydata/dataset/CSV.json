@@ -1,0 +1,89 @@
+{
+	"name": "CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Blob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "athletics 100m.csv",
+				"folderPath": "csvs",
+				"container": "olympics"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Event Type",
+				"type": "String"
+			},
+			{
+				"name": "Round",
+				"type": "String"
+			},
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Location",
+				"type": "String"
+			},
+			{
+				"name": "Rank",
+				"type": "String"
+			},
+			{
+				"name": "Athlete Bib",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "NOC Code",
+				"type": "String"
+			},
+			{
+				"name": "Heat",
+				"type": "String"
+			},
+			{
+				"name": "Lane",
+				"type": "String"
+			},
+			{
+				"name": "Pos",
+				"type": "String"
+			},
+			{
+				"name": "Time",
+				"type": "String"
+			},
+			{
+				"name": "Milliseconds",
+				"type": "String"
+			},
+			{
+				"name": "Wind",
+				"type": "String"
+			},
+			{
+				"name": "Result",
+				"type": "String"
+			},
+			{
+				"name": "Additional Info",
+				"type": "String"
+			}
+		]
+	}
+}
