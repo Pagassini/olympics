@@ -25,6 +25,219 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Create Athlete Silver Table",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Transfer to Bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Athlete] Bronze-Silver Transformations"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Create Round Silver Table",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Transfer to Bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Round] Bronze-Silver Transformations"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Create Race Silver Table",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Create Round Silver Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Create Athlete Silver Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Race] Bronze-Silver Transformations"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Create Gold DIM_Athlete",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Create Race Silver Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Gold] DIM_Athlete"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Create Gold DIM_Round",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Create Race Silver Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Gold] DIM_Round"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Create Gold FACT_Race",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Create Race Silver Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/[Gold] FACT_Race"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Delete Bronze",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Create Gold DIM_Athlete",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Create Gold DIM_Round",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Create Gold FACT_Race",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "Warehouse",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "DROP TABLE [bronze].[OLY_athletics]"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
 			}
 		],
 		"annotations": []
