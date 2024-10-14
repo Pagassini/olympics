@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "bronze",
-			"table": "athletics"
+			"table": "OLY_athletics"
 		}
 	}
 }
