@@ -5,7 +5,14 @@
 			{
 				"name": "Transfer to Bronze",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Convert PDFs to CSVs",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -237,6 +244,26 @@
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Convert PDFs to CSVs",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/lucas.pagassini@programmers.com.br/olympics/databricks/PDFs to CSVs"
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks_LinkedService",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
