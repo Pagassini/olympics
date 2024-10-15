@@ -265,6 +265,39 @@
 					"referenceName": "Databricks_LinkedService",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Add Missing Athlete Data",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Delete Bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "Warehouse",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "INSERT INTO [gold].[OLY_DIM_athlete]\nVALUES(514, 'MULAMBA Dominique Lasconi', 'COD', 'Male', GETDATE(), GETDATE(), 1)\n\nINSERT INTO [gold].[OLY_DIM_athlete]\nVALUES(452, 'BROWN Aaron', 'CAN', 'Male', GETDATE(), GETDATE(), 1)\n\nINSERT INTO [gold].[OLY_DIM_athlete]\nVALUES(690, 'AZU Jeremiah', 'GBR', 'Male', GETDATE(), GETDATE(), 1)\n\nINSERT INTO [gold].[OLY_DIM_athlete]\nVALUES(1042, 'SABINO Steven', 'MOZ', 'Male', GETDATE(), GETDATE(), 1)\n\nINSERT INTO [silver].[OLY_athlete]\nVALUES(514, 'MULAMBA Dominique Lasconi', 'COD', 'Male')\n\nINSERT INTO [silver].[OLY_athlete]\nVALUES(452, 'BROWN Aaron', 'CAN', 'Male')\n\nINSERT INTO [silver].[OLY_athlete]\nVALUES(690, 'AZU Jeremiah', 'GBR', 'Male')\n\nINSERT INTO [silver].[OLY_athlete]\nVALUES(1042, 'SABINO Steven', 'MOZ', 'Male')"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
 			}
 		],
 		"annotations": []
