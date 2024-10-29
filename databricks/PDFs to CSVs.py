@@ -13,10 +13,6 @@ import PyPDF2
 
 # COMMAND ----------
 
-dbutils.fs.unmount("/mnt/blob")
-
-# COMMAND ----------
-
 # MONTANDO O BLOB USANDO SAS TOKEN
 
 blob_container = dbutils.secrets.get(scope="blob", key="container")

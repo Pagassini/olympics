@@ -35,3 +35,16 @@ def save_tables(df, tablename):
 def generate_hash(id_name):
     hash_id = hashlib.sha256(str(id_name).encode('utf-8'))
     return hash_id.digest()
+  
+def load_query(query):
+      df = (spark.read
+          .format("jdbc")
+          .option("url", url)
+          .option("query", query)
+          .option("user", user)
+          .option("password", password)
+          .option("driver", driver)
+          .load())
+      return df
+
+

@@ -11,6 +11,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, lit, current_timestamp
 from pyspark.sql import functions as F
+from pyspark.sql import Window
 
 # COMMAND ----------
 
@@ -24,11 +25,12 @@ spark = SparkSession.builder.appName("CreateGoldLayer").getOrCreate()
 df_race = load_tables("silver.OLY_race")
 
 df_race = df_race.select(
-    "FK_athlete_id", "FK_round_id", "heat", "lane", "position", "time", "wind", "result", "additional_info"
+    "FK_athlete_id", "FK_round_id", "Rank" ,"heat", "lane", "position", "time", "wind", "result", "additional_info"
 )
 
 df_race = df_race.withColumnRenamed("FK_athlete_id", "NK_athlete") \
-    .withColumnRenamed("FK_round_id", "NK_round")
+    .withColumnRenamed("FK_round_id", "NK_round") \
+    .withColumnRenamed("Rank", "rank")
 
 df_race = df_race.withColumn(
     "qualified",
@@ -65,7 +67,7 @@ df_race = df_race.withColumn(
 )
 
 df_gold = df_race.select(
-    "NK_athlete", "NK_round", "heat", "lane", "position", "time", "wind", "qualified", 
+    "NK_athlete", "NK_round", "rank" ,"heat", "lane", "position", "time", "wind", "qualified", 
     "qualification_type", "disqualified", "disqualification_type", "record", "record_type"
 ).withColumn("insert_date", current_timestamp()) \
  .withColumn("modified_date", current_timestamp()) \

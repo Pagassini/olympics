@@ -27,7 +27,7 @@ df_bronze = load_tables("bronze.OLY_athletics")
 df_athlete = load_tables("silver.OLY_athlete") 
 df_round = load_tables("silver.OLY_round")
 
-df_race = df_bronze.select("Heat", "Lane", "Pos", "Time", "Milliseconds", "Wind", "Result", "Additional Info", "Athlete Bib", "Round", "Event Type") \
+df_race = df_bronze.select("Rank","Heat", "Lane", "Pos", "Time", "Milliseconds", "Wind", "Result", "Additional Info", "Athlete Bib", "Round", "Event Type") \
                    .withColumn("event", trim(split(df_bronze["Event Type"], " ")[0])) \
                    .withColumn("event_type", trim(split(df_bronze["Event Type"], " ")[1]))
 
